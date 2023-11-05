@@ -1,11 +1,12 @@
+import React from "react";
 import ShoppingListDetail from "../bricks/ShoppingListDetail";
 
-function ShoppingList() {
+function ShoppingList({shoppingList}) {
 
 
     return (
         <>
-            <ShoppingListDetail />
+            <ShoppingListDetail shoppingList={shoppingList} />
         </>
     );
 }

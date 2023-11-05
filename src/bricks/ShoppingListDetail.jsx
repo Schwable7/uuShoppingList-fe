@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
 
-function ShoppingListDetail() {
+function ShoppingListDetail({shoppingList}) {
     const initialCurrentUser = {id: 1, name: 'Mike'}; // This should come from your auth system
 
     const initialItems = [
@@ -23,15 +23,15 @@ function ShoppingListDetail() {
         {id: 1, name: 'Mike'},
         {id: 3, name: 'John'}
     ];
-    const [items, setItems] = useState(initialItems);
+    const [items, setItems] = useState(shoppingList.items);
     const [newItem, setNewItem] = useState('');
     const [showCompleted, setShowCompleted] = useState(true);
-    const [title, setTitle] = useState("Groceries");
+    const [title, setTitle] = useState(shoppingList.title);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [members, setMembers] = useState(initialMembers);
+    const [members, setMembers] = useState(shoppingList.members);
     const [newMember, setNewMember] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
-    const [owner, setOwner] = useState(initialCurrentUser); // Assuming Mike is the owner
+    const [owner, setOwner] = useState(shoppingList.owner); // Assuming Mike is the owner
     const [currentUser, setCurrentUser] = useState(initialCurrentUser); // This should come from your auth system
 
 

@@ -20,11 +20,11 @@ const shoppingLists = [
             {id: 3, name: "John"},
         ],
         items: [
-            {id: 1, name: "Milk"},
-            {id: 2, name: "Bread"},
-            {id: 3, name: "Eggs"},
-            {id: 4, name: "Apples"},
-            {id: 5, name: "Bannana"}
+            {id: 1, text: "Milk"},
+            {id: 2, text: "Bread"},
+            {id: 3, text: "Eggs"},
+            {id: 4, text: "Apples"},
+            {id: 5, text: "Bannana"}
         ]
     }
     ]
@@ -34,13 +34,7 @@ root.render(
             <Routes>
                 <Route path="" element={<App/>}>
                     <Route path="/shoppingList" element={<ShoppingListsView shoppingLists={shoppingLists}/>}/>
-                    <Route path="/shoppingList/:id" render={(props) => {
-                        const shoppingListId = props.match.params.id;
-                        const selectedShoppingList = shoppingLists.find(list => list.id.toString() === shoppingListId);
-                        return selectedShoppingList
-                            ? <ShoppingList shoppingList={selectedShoppingList} />
-                            : <div>Shopping list not found.</div>;
-                    }} />
+                    <Route path="/shoppingList/:id" element={<ShoppingList shoppingLists={shoppingLists} />} />
                 </Route>
             </Routes>
         </BrowserRouter>

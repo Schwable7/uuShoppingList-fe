@@ -9,57 +9,9 @@ import App from "./App";
 import ShoppingListsView from "./routes/ShoppingListsView";
 import Home from "./routes/Home";
 import {UserAuthProvider} from './context/UserAuthContext';
-
+import {shoppingLists} from "./data";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const shoppingLists = [
-    {
-        id: 1,
-        title: "Groceries",
-        owner: {id: 1, name: "Mike"},
-        members: [
-            {id: 1, name: "Mike"},
-            {id: 3, name: "John"},
-        ],
-        items: [
-            {id: 1, text: "Milk"},
-            {id: 2, text: "Bread"},
-            {id: 3, text: "Eggs"},
-            {id: 4, text: "Apples"},
-            {id: 5, text: "Bannana"}
-        ]
-    },
-    {
-        id: 2,
-        title: "Trip shopping",
-        owner: {id: 1, name: "Mike"},
-        members: [
-            {id: 2, name: "Larry"},
-            {id: 1, name: "Mike"},
-        ],
-        items: [
-            {id: 1, text: "Hiking boots"},
-            {id: 2, text: "Tent"},
-            {id: 3, text: "Gloves"},
-            {id: 4, text: "Hat"},
-            {id: 5, text: "Hiking poles"}
-        ]
-    },
-    {
-        id: 3,
-        title: "Drug store",
-        owner: {id: 1, name: "Mike"},
-        members: [
-            {id: 1, name: "Mike"},
-            {id: 3, name: "John"},
-        ],
-        items: [
-            {id: 1, text: "Tooth paste"},
-            {id: 2, text: "Shampoo"},
-            {id: 3, text: "Soap"}
-        ]
-    }
-]
 root.render(
     <React.StrictMode>
         <BrowserRouter>

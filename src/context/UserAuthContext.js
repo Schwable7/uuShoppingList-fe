@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import { users } from '../data';
 const UserAuthContext = createContext(null);
 
 
@@ -11,12 +11,6 @@ export function useAuth() {
 export function UserAuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState({id: 1, name: 'Mike'});
 
-    const users = [
-        {id: 1, name: 'Mike'},
-        {id: 2, name: 'Larry'},
-        {id: 3, name: 'John'},
-        {id: 4, name: 'Kate'},
-    ];
     // Function to handle user login
     const login = (user) => {
         setCurrentUser(user);

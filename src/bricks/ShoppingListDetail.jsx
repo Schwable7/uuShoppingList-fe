@@ -1,28 +1,12 @@
 import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
+import {useAuth} from "../context/UserAuthContext";
 
 function ShoppingListDetail({shoppingList}) {
-    const initialCurrentUser = {id: 1, name: 'Mike'}; // This should come from your auth system
 
-    const initialItems = [
-        {id: 1, text: 'Milk', completed: false},
-        {id: 2, text: 'Bread', completed: false},
-        {id: 3, text: 'Eggs', completed: false},
-        {id: 4, text: 'Apples', completed: false},
-        {id: 5, text: 'Bananas', completed: false},
-    ];
+    const {currentUser, users} = useAuth();
 
-    const users = [
-        {id: 1, name: 'Mike'},
-        {id: 2, name: 'Larry'},
-        {id: 3, name: 'John'},
-        {id: 4, name: 'Kate'},
-    ];
-    const initialMembers = [
-        {id: 1, name: 'Mike'},
-        {id: 3, name: 'John'}
-    ];
     const [items, setItems] = useState(shoppingList.items);
     const [newItem, setNewItem] = useState('');
     const [showCompleted, setShowCompleted] = useState(true);
@@ -32,14 +16,6 @@ function ShoppingListDetail({shoppingList}) {
     const [newMember, setNewMember] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [owner, setOwner] = useState(shoppingList.owner); // Assuming Mike is the owner
-    const [currentUser, setCurrentUser] = useState(initialCurrentUser); // This should come from your auth system
-
-
-    const handleUserChange = (event) => {
-        const selectedUserId = parseInt(event.target.value, 10);
-        const user = users.find(u => u.id === selectedUserId);
-        setCurrentUser(user);
-    };
 
     const isUserAuthorized = (currentUser, owner, members) => {
         return currentUser.id === owner.id || members.some(member => member.id === currentUser.id);
@@ -108,14 +84,14 @@ function ShoppingListDetail({shoppingList}) {
     return (
 
         <div>
-            <div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}}>
-                <label htmlFor="user-select">Choose a user:</label>
-                <select id="user-select" onChange={handleUserChange} value={currentUser.id}>
-                    {users.map(user => (
-                        <option key={user.id} value={user.id}>{user.name}</option>
-                    ))}
-                </select>
-            </div>
+            {/*<div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}}>*/}
+            {/*    <label htmlFor="user-select">Choose a user:</label>*/}
+            {/*    <select id="user-select" onChange={handleUserChange} value={currentUser.id}>*/}
+            {/*        {users.map(user => (*/}
+            {/*            <option key={user.id} value={user.id}>{user.name}</option>*/}
+            {/*        ))}*/}
+            {/*    </select>*/}
+            {/*</div>*/}
 
             {authorized ? (
                 // Render the shopping list if the user is authorized

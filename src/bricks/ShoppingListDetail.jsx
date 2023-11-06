@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
+import styles from "../css/shoppinglist.module.css";
 
 function ShoppingListDetail() {
     const initialCurrentUser = {id: 1, name: 'Mike'}; // This should come from your auth system
@@ -108,8 +109,8 @@ function ShoppingListDetail() {
     return (
 
         <div>
-            <div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}}>
-                <label htmlFor="user-select">Choose a user:</label>
+            <div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}} className={styles.container}>
+                <label htmlFor="user-select">Choose a user: </label>
                 <select id="user-select" onChange={handleUserChange} value={currentUser.id}>
                     {users.map(user => (
                         <option key={user.id} value={user.id}>{user.name}</option>
@@ -120,7 +121,7 @@ function ShoppingListDetail() {
             {authorized ? (
                 // Render the shopping list if the user is authorized
                 <>
-                    <div>
+                    <div className={styles.container}>
                         {isEditingTitle ? (
                             <input
                                 type="text"
@@ -137,13 +138,13 @@ function ShoppingListDetail() {
                             </h1>
                         )}
 
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} className={styles.container}>
                             <button onClick={toggleShowCompleted}>
                                 {showCompleted ? 'Hide' : 'Show'} Completed
                             </button>
                             <button onClick={handleOpenModal}>Members</button>
                         </div>
-                        <div>
+                        <div className={styles.container}>
                             <input
                                 type="text"
                                 value={newItem}

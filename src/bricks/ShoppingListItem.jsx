@@ -5,7 +5,7 @@ import styles from "../css/shoppinglist.module.css";
 
 function ShoppingListItem({ item, onToggle, onDelete }) {
     return (
-        <div className={styles.item}>
+        <div className={styles.listItem}>
             <li className={item.completed ? styles.completed : ''}>
                 <input
                     type="checkbox"

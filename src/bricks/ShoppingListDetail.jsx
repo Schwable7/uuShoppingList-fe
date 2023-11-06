@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
 import {useAuth} from "../context/UserAuthContext";
+import styles from "../css/shoppinglist.module.css";
 
 function ShoppingListDetail({shoppingList}) {
 
@@ -18,7 +19,7 @@ function ShoppingListDetail({shoppingList}) {
     const [owner, setOwner] = useState(shoppingList.owner); // Assuming Mike is the owner
 
     const isUserAuthorized = (currentUser, owner, members) => {
-        return currentUser.id === owner.id || members.some(member => member.id === currentUser.id);
+        return currentUser && (currentUser.id === owner.id || members.some(member => member.id === currentUser.id));
     };
 
     const handleTitleClick = () => {
@@ -84,19 +85,10 @@ function ShoppingListDetail({shoppingList}) {
     return (
 
         <div>
-            {/*<div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}}>*/}
-            {/*    <label htmlFor="user-select">Choose a user:</label>*/}
-            {/*    <select id="user-select" onChange={handleUserChange} value={currentUser.id}>*/}
-            {/*        {users.map(user => (*/}
-            {/*            <option key={user.id} value={user.id}>{user.name}</option>*/}
-            {/*        ))}*/}
-            {/*    </select>*/}
-            {/*</div>*/}
-
             {authorized ? (
                 // Render the shopping list if the user is authorized
                 <>
-                    <div>
+                    <div className={styles.container}>
                         {isEditingTitle ? (
                             <input
                                 type="text"
@@ -113,13 +105,14 @@ function ShoppingListDetail({shoppingList}) {
                             </h1>
                         )}
 
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+                             className={styles.container}>
                             <button onClick={toggleShowCompleted}>
                                 {showCompleted ? 'Hide' : 'Show'} Completed
                             </button>
                             <button onClick={handleOpenModal}>Members</button>
                         </div>
-                        <div>
+                        <div className={styles.container}>
                             <input
                                 type="text"
                                 value={newItem}
@@ -142,7 +135,7 @@ function ShoppingListDetail({shoppingList}) {
                             currentUser={currentUser}
                         />
 
-                        <ul>
+                        <ul className={styles.container}>
                             {filteredItems.map((item) => (
                                 <ShoppingListItem
                                     key={item.id}
@@ -156,9 +149,10 @@ function ShoppingListDetail({shoppingList}) {
                 </>
             ) : (
                 // Display a message if the user is not authorized
-                <h1>You are not authorized to see this shopping list.</h1>
+                <h1>You are not authorized or logged in to see this shopping list.</h1>
             )}
         </div>
+
     );
 }
 

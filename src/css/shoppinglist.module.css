@@ -6,15 +6,15 @@ body {
     padding: 20px;
 }
 
-/*div {*/
-/*    max-width: 1000px;*/
-/*    margin: auto;*/
-/*    background: white;*/
-/*    padding: 10px;*/
-/*    margin-top: 10px;*/
-/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
-/*    border-radius: 8px;*/
-/*}*/
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
 
 h1 {
     color: #333;
@@ -72,9 +72,20 @@ button:focus {
     color: #d3d3d3;
 }
 
-.item {
+.listItem {
     position: relative;
     padding: 20px 40px 20px 10px; /* top, right, bottom, left */
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    /*justify-content: space-between;*/
+}
+
+.item {
+    position: relative;
+    padding: 10px 40px 10px 10px; /* top, right, bottom, left */
     margin-bottom: 10px;
     display: flex;
     align-items: center;

@@ -5,17 +5,19 @@ import '@mui/material/styles';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ShoppingList from "./routes/ShoppingList";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <BrowserRouter>
-          <Routes>
-              <Route path="/shoppingList" element={<ShoppingList/>}>
-              </Route>
-          </Routes>
-      </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+        <BrowserRouter>
+            <Routes>
+                <Route path="" element={<App/>}>
+                    <Route path="/shoppingList" element={<ShoppingList/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

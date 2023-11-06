@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
-import ShoppingListTile from '../bricks/ShoppingListTile'; // Adjust the import path as necessary
+import ShoppingListTile from '../bricks/ShoppingListTile';
 import { useAuth } from "../context/UserAuthContext";
 
-function ShoppingListsView({ shoppingLists }) {
+function ShoppingListsView({ shoppingLists, onDeleteShoppingList }) {
+    const [shopLists, setShopLists] = useState(shoppingLists);
     const { currentUser } = useAuth();
 
-    const visibleShoppingLists = currentUser ? shoppingLists.filter(shoppingList =>
+    const visibleShoppingLists = currentUser ? shopLists.filter(shoppingList =>
         shoppingList.members.some(member => member.id === currentUser.id)
     ) : [];
+
+    const handleDelete = (id) => {
+        const updatedShoppingLists = shopLists.filter(shoppingList => shoppingList.id !== id);
+        setShopLists(updatedShoppingLists);
+    };
 
     if (!currentUser) {
         return <h2>You need to log in to see your shopping lists.</h2>;
@@ -19,7 +25,11 @@ function ShoppingListsView({ shoppingLists }) {
             {visibleShoppingLists.length > 0 ? (
                 visibleShoppingLists.map((shoppingList) => (
                     <Grid item key={shoppingList.id} xs={12} sm={6} md={4}>
-                        <ShoppingListTile shoppingList={shoppingList} />
+                        <ShoppingListTile
+                            shoppingList={shoppingList}
+                            isOwner={shoppingList.owner.id === currentUser.id}
+                            onDelete={handleDelete}
+                        />
                     </Grid>
                 ))
             ) : (

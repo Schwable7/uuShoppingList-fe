@@ -5,6 +5,10 @@ function Home() {
         <p>
             This application is used to manage shopping lists.
         </p>
+
+        <p>
+            Implemented by Michal Šváb
+        </p>
     </div>
 
 }

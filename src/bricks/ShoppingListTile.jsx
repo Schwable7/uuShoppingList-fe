@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Card, CardActionArea, CardContent, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { Link } from "react-router-dom";
 
-function ShoppingListTile({ shoppingList, isOwner, onDelete }) {
+function ShoppingListTile({ shoppingList, isOwner, onDelete, onArchive, archived }) {
     const [openDialog, setOpenDialog] = useState(false);
-
+    const handleArchive = () => {
+        onArchive(shoppingList.id);
+    };
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -29,8 +32,8 @@ function ShoppingListTile({ shoppingList, isOwner, onDelete }) {
                             <Typography gutterBottom variant="h5" component="h2" style={{ color: 'black' }}>
                                 {shoppingList.title}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                {shoppingList.description}
+                            <Typography variant="body2" color="textSecondary" component="p" style={{ color: 'red' }}>
+                                {shoppingList.archived ? 'Archived' : ""}
                             </Typography>
                         </CardContent>
                         </Link>
@@ -39,6 +42,9 @@ function ShoppingListTile({ shoppingList, isOwner, onDelete }) {
                                 <DeleteIcon />
                             </IconButton>
                         )}
+                        <IconButton onClick={handleArchive} aria-label="archive">
+                            <ArchiveIcon />
+                        </IconButton>
                     </CardActionArea>
 
                 </Card>

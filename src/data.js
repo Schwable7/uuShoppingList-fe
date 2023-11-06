@@ -3,6 +3,7 @@ const shoppingLists = [
         id: 1,
         title: "Groceries",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 1, name: "Mike"},
             {id: 2, name: "Larry"},
@@ -21,6 +22,7 @@ const shoppingLists = [
         id: 2,
         title: "Trip shopping",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 2, name: "Larry"},
             {id: 1, name: "Mike"},
@@ -37,6 +39,7 @@ const shoppingLists = [
         id: 3,
         title: "Drug store",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 1, name: "Mike"},
             {id: 3, name: "John"},
@@ -51,6 +54,7 @@ const shoppingLists = [
         id: 4,
         title: "Snacks",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 1, name: "Mike"},
             {id: 4, name: "Kate"},
@@ -65,6 +69,7 @@ const shoppingLists = [
         id: 5,
         title: "Healthy food",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 1, name: "Mike"},
             {id: 2, name: "Larry"},
@@ -79,6 +84,7 @@ const shoppingLists = [
         id: 6,
         title: "Electronics",
         owner: {id: 1, name: "Mike"},
+        archived: false,
         members: [
             {id: 1, name: "Mike"},
             {id: 4, name: "Kate"},

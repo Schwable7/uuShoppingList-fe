@@ -4,10 +4,13 @@ import ShoppingListTile from '../bricks/ShoppingListTile';
 import {useAuth} from "../context/UserAuthContext";
 import {Button} from "@mui/material";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import AddIcon from "@mui/icons-material/Add";
+import CreateShoppingListModal from "../bricks/CreateShoppingListModal";
 
-function ShoppingListsView({shoppingLists, onDeleteShoppingList}) {
+function ShoppingListsView({shoppingLists}) {
     const [shopLists, setShopLists] = useState(shoppingLists);
     const [showArchived, setShowArchived] = useState(true);
+    const [isCreateModalOpen, setModalOpen] = useState(false);
     const {currentUser} = useAuth();
 
     const handleArchive = (id) => {
@@ -37,6 +40,10 @@ function ShoppingListsView({shoppingLists, onDeleteShoppingList}) {
         setShopLists(updatedShoppingLists);
     };
 
+    const handleOpenCreateModal = () => {
+        setModalOpen(true);
+    };
+
     if (!currentUser) {
         return <h2>You need to log in to see your shopping lists.</h2>;
     }
@@ -45,6 +52,9 @@ function ShoppingListsView({shoppingLists, onDeleteShoppingList}) {
         <>
             <Button startIcon={<VisibilityOffIcon/>} onClick={toggleArchivedVisibility}>
                 {showArchived ? 'Hide' : 'Show'} Archived
+            </Button>
+            <Button startIcon={<AddIcon/>} onClick={handleOpenCreateModal}>
+                Create Shopping List
             </Button>
             <Grid container spacing={2}>
                 {visibleShoppingLists.length > 0 ? (
@@ -63,6 +73,9 @@ function ShoppingListsView({shoppingLists, onDeleteShoppingList}) {
                     <h2>You are not a member of any shopping lists.</h2>
                 )}
             </Grid>
+
+            <CreateShoppingListModal currentUser={currentUser} setShopLists={setShopLists} shopLists={shopLists}
+                                     setModalOpen={setModalOpen} modalOpen={isCreateModalOpen}/>
         </>
     );
 }

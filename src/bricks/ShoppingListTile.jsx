@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import { Card, CardActionArea, CardContent, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import React, {useState} from 'react';
+import {
+    Button,
+    Card,
+    CardActionArea,
+    CardContent,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    Typography
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-function ShoppingListTile({ shoppingList, isOwner, onDelete, onArchive, archived }) {
+function ShoppingListTile({shoppingList, isOwner, onDelete, onArchive, archived}) {
     const [openDialog, setOpenDialog] = useState(false);
     const handleArchive = () => {
         onArchive(shoppingList.id);
@@ -24,30 +36,29 @@ function ShoppingListTile({ shoppingList, isOwner, onDelete, onArchive, archived
 
     return (
         <>
-
-                <Card>
-                    <CardActionArea>
-                        <Link to={`/shoppingList/${shoppingList.id}`} style={{ textDecoration: 'black' }}>
+            <Card>
+                <CardActionArea style={{minHeight: '150px'}}>
+                    <Link to={`/shoppingList/${shoppingList.id}`} style={{textDecoration: 'black'}}>
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2" style={{ color: 'black' }}>
+                            <Typography gutterBottom variant="h5" component="h2" style={{color: 'black'}}>
                                 {shoppingList.title}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p" style={{ color: 'red' }}>
+                            <Typography variant="body2" color="textSecondary" component="p" style={{color: 'red'}}>
                                 {shoppingList.archived ? 'Archived' : ""}
                             </Typography>
                         </CardContent>
-                        </Link>
-                        {isOwner && (
-                            <IconButton onClick={handleOpenDialog} aria-label="delete">
-                                <DeleteIcon />
-                            </IconButton>
-                        )}
-                        <IconButton onClick={handleArchive} aria-label="archive">
-                            <ArchiveIcon />
+                    </Link>
+                    {isOwner && (
+                        <IconButton onClick={handleOpenDialog} aria-label="delete">
+                            <DeleteIcon/>
                         </IconButton>
-                    </CardActionArea>
+                    )}
+                    <IconButton onClick={handleArchive} aria-label="archive">
+                        <ArchiveIcon/>
+                    </IconButton>
+                </CardActionArea>
 
-                </Card>
+            </Card>
 
 
             {/* Delete Confirmation Dialog */}

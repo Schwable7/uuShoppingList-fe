@@ -1,56 +1,35 @@
 import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
+import {useAuth} from "../context/UserAuthContext";
+import {useShoppingListsCtx} from "../context/ShoppingListContext";
 import styles from "../css/shoppinglist.module.css";
+import {useNotification} from "../context/NotificationContext";
 
-function ShoppingListDetail() {
-    const initialCurrentUser = {id: 1, name: 'Mike'}; // This should come from your auth system
+function ShoppingListDetail({shoppingList}) {
 
-    const initialItems = [
-        {id: 1, text: 'Milk', completed: false},
-        {id: 2, text: 'Bread', completed: false},
-        {id: 3, text: 'Eggs', completed: false},
-        {id: 4, text: 'Apples', completed: false},
-        {id: 5, text: 'Bananas', completed: false},
-    ];
-
-    const users = [
-        {id: 1, name: 'Mike'},
-        {id: 2, name: 'Larry'},
-        {id: 3, name: 'John'},
-        {id: 4, name: 'Kate'},
-    ];
-    const initialMembers = [
-        {id: 1, name: 'Mike'},
-        {id: 3, name: 'John'}
-    ];
-    const [items, setItems] = useState(initialItems);
+    const {currentUser, users} = useAuth();
+    const {shoppingLists, setShoppingLists} = useShoppingListsCtx();
+    const [items, setItems] = useState(shoppingList.items);
     const [newItem, setNewItem] = useState('');
     const [showCompleted, setShowCompleted] = useState(true);
-    const [title, setTitle] = useState("Groceries");
+    const [title, setTitle] = useState(shoppingList.title);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [members, setMembers] = useState(initialMembers);
-    const [newMember, setNewMember] = useState('');
+    const [members, setMembers] = useState(shoppingList.members);
     const [modalOpen, setModalOpen] = useState(false);
-    const [owner, setOwner] = useState(initialCurrentUser); // Assuming Mike is the owner
-    const [currentUser, setCurrentUser] = useState(initialCurrentUser); // This should come from your auth system
 
-
-    const handleUserChange = (event) => {
-        const selectedUserId = parseInt(event.target.value, 10);
-        const user = users.find(u => u.id === selectedUserId);
-        setCurrentUser(user);
-    };
+    const showNotification = useNotification();
+    const owner = shoppingList.owner; // Assuming Mike is the owner
 
     const isUserAuthorized = (currentUser, owner, members) => {
-        return currentUser.id === owner.id || members.some(member => member.id === currentUser.id);
+        return currentUser && (currentUser.id === owner.id || members.some(member => member.id === currentUser.id));
     };
 
     const handleTitleClick = () => {
         if (currentUser.id === owner.id) { // Check if the current user is the owner
             setIsEditingTitle(true);
         } else {
-            alert('Only the owner can edit the shopping list title.'); // Inform non-owners
+            showNotification('error', 'You are not authorized to edit this shopping list title');
         }
     };
     const handleOpenModal = () => {
@@ -62,14 +41,53 @@ function ShoppingListDetail() {
 
     const handleTitleKeyDown = (event) => {
         // Save the title on Enter key and cancel editing on Escape key
-        if (event.key === 'Enter' || event.key === 'Escape') {
+        if (event.key === 'Enter') {
             event.preventDefault();
             setIsEditingTitle(false);
-            if (event.key === 'Enter') {
-                setTitle(event.target.value);
-            }
+            const updatedTitle = event.target.value;
+            setTitle(updatedTitle);
+            updateShoppingListTitle(shoppingList.id, updatedTitle);
+        } else if (event.key === 'Escape') {
+            event.preventDefault();
+            setIsEditingTitle(false);
         }
     };
+
+    const updateShoppingListTitle = (id, newTitle) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, title: newTitle };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
+        showNotification('success', 'Shopping list title updated successfully');
+    };
+
+    const updateShoppingListMembers = (id, updatedMembers) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, members: updatedMembers };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
+    };
+
+    const addMember = (newMember) => {
+        const updatedMembers = [...members, newMember];
+        setMembers(updatedMembers);
+        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        showNotification('success', 'Member added successfully');
+    };
+
+    const removeMember = (memberToDelete) => {
+        const updatedMembers = members.filter(member => member !== memberToDelete);
+        setMembers(updatedMembers);
+        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        showNotification('success', 'Member removed successfully');
+    };
+
     const handleAddItem = () => {
         if (newItem.trim() !== '') {
             const newItemObject = {
@@ -77,8 +95,11 @@ function ShoppingListDetail() {
                 text: newItem,
                 completed: false,
             };
-            setItems([...items, newItemObject]);
+            const newItems = [...items, newItemObject];
+            setItems(newItems);
+            updateShoppingListItems(shoppingList.id, newItems);
             setNewItem('');
+            showNotification('success', 'Item added successfully');
         }
     };
 
@@ -87,11 +108,24 @@ function ShoppingListDetail() {
             item.id === id ? {...item, completed: !item.completed} : item
         );
         setItems(updatedItems);
+        updateShoppingListItems(shoppingList.id, updatedItems);
     };
 
     const handleDeleteItem = (id) => {
         const updatedItems = items.filter(item => item.id !== id);
         setItems(updatedItems);
+        updateShoppingListItems(shoppingList.id, updatedItems);
+        showNotification('success', 'Item deleted successfully');
+    };
+
+    const updateShoppingListItems = (id, updatedItems) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, items: updatedItems };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
     };
 
     const toggleShowCompleted = () => {
@@ -109,15 +143,6 @@ function ShoppingListDetail() {
     return (
 
         <div>
-            <div style={{position: 'absolute', top: 0, right: 0, padding: '10px'}} className={styles.container}>
-                <label htmlFor="user-select">Choose a user: </label>
-                <select id="user-select" onChange={handleUserChange} value={currentUser.id}>
-                    {users.map(user => (
-                        <option key={user.id} value={user.id}>{user.name}</option>
-                    ))}
-                </select>
-            </div>
-
             {authorized ? (
                 // Render the shopping list if the user is authorized
                 <>
@@ -138,7 +163,8 @@ function ShoppingListDetail() {
                             </h1>
                         )}
 
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} className={styles.container}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+                             className={styles.container}>
                             <button onClick={toggleShowCompleted}>
                                 {showCompleted ? 'Hide' : 'Show'} Completed
                             </button>
@@ -158,16 +184,15 @@ function ShoppingListDetail() {
                         <MembersModal
                             users={users}
                             members={members}
-                            setMembers={setMembers}
-                            newMember={newMember}
-                            setNewMember={setNewMember}
+                            handleAddMember={addMember}
+                            handleDeleteMember={removeMember}
                             modalOpen={modalOpen}
                             setModalOpen={setModalOpen}
                             owner={owner}
                             currentUser={currentUser}
                         />
 
-                        <ul>
+                        <ul className={styles.container}>
                             {filteredItems.map((item) => (
                                 <ShoppingListItem
                                     key={item.id}
@@ -181,9 +206,10 @@ function ShoppingListDetail() {
                 </>
             ) : (
                 // Display a message if the user is not authorized
-                <h1>You are not authorized to see this shopping list.</h1>
+                <h1>You are not authorized or logged in to see this shopping list.</h1>
             )}
         </div>
+
     );
 }
 

@@ -6,16 +6,29 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ShoppingList from "./routes/ShoppingList";
 import App from "./App";
-
+import ShoppingListsView from "./routes/ShoppingListsView";
+import Home from "./routes/Home";
+import {UserAuthProvider} from './context/UserAuthContext';
+import {ShoppingListsProvider} from "./context/ShoppingListContext";
+import {NotificationProvider} from "./context/NotificationContext";
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <Routes>
-                <Route path="" element={<App/>}>
-                    <Route path="/shoppingList" element={<ShoppingList/>}/>
-                </Route>
-            </Routes>
+            <UserAuthProvider>
+                <ShoppingListsProvider>
+                    <NotificationProvider>
+                        <Routes>
+                            <Route path="/" element={<App/>}>
+                                <Route path="" element={<Home/>}/>
+                                <Route path="/shoppingList" element={<ShoppingListsView/>}/>
+                                <Route path="/shoppingList/:id" element={<ShoppingList/>}/>
+                            </Route>
+                        </Routes>
+                    </NotificationProvider>
+                </ShoppingListsProvider>
+            </UserAuthProvider>
         </BrowserRouter>
     </React.StrictMode>
 );

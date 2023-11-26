@@ -12,22 +12,19 @@ import styles from "../css/shoppinglist.module.css";
 import Member from "./Member";
 
 
-function MembersModal({users, members, setMembers, modalOpen, setModalOpen, owner, currentUser}) {
+function MembersModal({users, members, handleAddMember, handleDeleteMember, modalOpen, setModalOpen, owner, currentUser}) {
     const [selectedUser, setSelectedUser] = useState('');
 
     const isOwner = currentUser.id === owner.id;
-    const handleAddMember = () => {
+    const addMember = () => {
         if (selectedUser) {
-            const userToAdd = users.find(user => user.id === selectedUser);
-            if (userToAdd && !members.some(member => member.id === userToAdd.id)) {
-                setMembers([...members, userToAdd]);
-            }
+            handleAddMember(selectedUser);
             setSelectedUser('');
         }
     };
 
-    const handleDeleteMember = (memberToDelete) => {
-        setMembers(members.filter((member) => member !== memberToDelete));
+    const removeMember = (memberToDelete) => {
+        handleDeleteMember(memberToDelete);
     };
 
     const handleCloseModal = () => {
@@ -37,6 +34,8 @@ function MembersModal({users, members, setMembers, modalOpen, setModalOpen, owne
     const handleSelectChange = (event) => {
         setSelectedUser(event.target.value);
     };
+
+    const possibleMembers = users.filter(user => !members.some(member => member.id === user.id));
 
     return (
         <Modal
@@ -63,8 +62,9 @@ function MembersModal({users, members, setMembers, modalOpen, setModalOpen, owne
                         <Member
                             key={index}
                             member={member}
+                            owner={owner}
                             isOwner={isOwner}
-                            handleDeleteMember={handleDeleteMember}
+                            handleDeleteMember={removeMember}
                             currentUser={currentUser}
                         />
                     ))}
@@ -80,13 +80,13 @@ function MembersModal({users, members, setMembers, modalOpen, setModalOpen, owne
                                 label="Add Member"
                                 onChange={handleSelectChange}
                             >
-                                {users.map((user) => (
-                                    <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+                                {possibleMembers.map((user) => (
+                                    <MenuItem key={user.id} value={user}>{user.name}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
                         <IconButton
-                            onClick={handleAddMember}
+                            onClick={addMember}
                             aria-label="add member"
                             size="small"
                             className={styles.deleteBtn}

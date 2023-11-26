@@ -1,4 +1,4 @@
-# Shopping list application
+# Shopping list application 📝
 
 ## In this version of application, you can:
 - See homepage of Shopping List application

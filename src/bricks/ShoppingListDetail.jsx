@@ -2,21 +2,24 @@ import React, {useState} from 'react';
 import ShoppingListItem from './ShoppingListItem';
 import MembersModal from "./MembersModal"; // Adjust the import path as necessary
 import {useAuth} from "../context/UserAuthContext";
+import {useShoppingListsCtx} from "../context/ShoppingListContext";
 import styles from "../css/shoppinglist.module.css";
+import {useNotification} from "../context/NotificationContext";
 
 function ShoppingListDetail({shoppingList}) {
 
     const {currentUser, users} = useAuth();
-
+    const {shoppingLists, setShoppingLists} = useShoppingListsCtx();
     const [items, setItems] = useState(shoppingList.items);
     const [newItem, setNewItem] = useState('');
     const [showCompleted, setShowCompleted] = useState(true);
     const [title, setTitle] = useState(shoppingList.title);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [members, setMembers] = useState(shoppingList.members);
-    const [newMember, setNewMember] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
-    const [owner, setOwner] = useState(shoppingList.owner); // Assuming Mike is the owner
+
+    const showNotification = useNotification();
+    const owner = shoppingList.owner; // Assuming Mike is the owner
 
     const isUserAuthorized = (currentUser, owner, members) => {
         return currentUser && (currentUser.id === owner.id || members.some(member => member.id === currentUser.id));
@@ -26,7 +29,7 @@ function ShoppingListDetail({shoppingList}) {
         if (currentUser.id === owner.id) { // Check if the current user is the owner
             setIsEditingTitle(true);
         } else {
-            alert('Only the owner can edit the shopping list title.'); // Inform non-owners
+            showNotification('error', 'You are not authorized to edit this shopping list title');
         }
     };
     const handleOpenModal = () => {
@@ -38,14 +41,53 @@ function ShoppingListDetail({shoppingList}) {
 
     const handleTitleKeyDown = (event) => {
         // Save the title on Enter key and cancel editing on Escape key
-        if (event.key === 'Enter' || event.key === 'Escape') {
+        if (event.key === 'Enter') {
             event.preventDefault();
             setIsEditingTitle(false);
-            if (event.key === 'Enter') {
-                setTitle(event.target.value);
-            }
+            const updatedTitle = event.target.value;
+            setTitle(updatedTitle);
+            updateShoppingListTitle(shoppingList.id, updatedTitle);
+        } else if (event.key === 'Escape') {
+            event.preventDefault();
+            setIsEditingTitle(false);
         }
     };
+
+    const updateShoppingListTitle = (id, newTitle) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, title: newTitle };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
+        showNotification('success', 'Shopping list title updated successfully');
+    };
+
+    const updateShoppingListMembers = (id, updatedMembers) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, members: updatedMembers };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
+    };
+
+    const addMember = (newMember) => {
+        const updatedMembers = [...members, newMember];
+        setMembers(updatedMembers);
+        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        showNotification('success', 'Member added successfully');
+    };
+
+    const removeMember = (memberToDelete) => {
+        const updatedMembers = members.filter(member => member !== memberToDelete);
+        setMembers(updatedMembers);
+        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        showNotification('success', 'Member removed successfully');
+    };
+
     const handleAddItem = () => {
         if (newItem.trim() !== '') {
             const newItemObject = {
@@ -53,8 +95,11 @@ function ShoppingListDetail({shoppingList}) {
                 text: newItem,
                 completed: false,
             };
-            setItems([...items, newItemObject]);
+            const newItems = [...items, newItemObject];
+            setItems(newItems);
+            updateShoppingListItems(shoppingList.id, newItems);
             setNewItem('');
+            showNotification('success', 'Item added successfully');
         }
     };
 
@@ -63,11 +108,24 @@ function ShoppingListDetail({shoppingList}) {
             item.id === id ? {...item, completed: !item.completed} : item
         );
         setItems(updatedItems);
+        updateShoppingListItems(shoppingList.id, updatedItems);
     };
 
     const handleDeleteItem = (id) => {
         const updatedItems = items.filter(item => item.id !== id);
         setItems(updatedItems);
+        updateShoppingListItems(shoppingList.id, updatedItems);
+        showNotification('success', 'Item deleted successfully');
+    };
+
+    const updateShoppingListItems = (id, updatedItems) => {
+        const updatedLists = shoppingLists.map(list => {
+            if (list.id === id) {
+                return { ...list, items: updatedItems };
+            }
+            return list;
+        });
+        setShoppingLists(updatedLists);
     };
 
     const toggleShowCompleted = () => {
@@ -126,9 +184,8 @@ function ShoppingListDetail({shoppingList}) {
                         <MembersModal
                             users={users}
                             members={members}
-                            setMembers={setMembers}
-                            newMember={newMember}
-                            setNewMember={setNewMember}
+                            handleAddMember={addMember}
+                            handleDeleteMember={removeMember}
                             modalOpen={modalOpen}
                             setModalOpen={setModalOpen}
                             owner={owner}

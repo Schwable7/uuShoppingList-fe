@@ -79,7 +79,7 @@ function ShoppingListTile({shoppingList, isOwner, onDelete, onArchive, archived}
                         Cancel
                     </Button>
                     <Button onClick={handleDelete} color="primary" autoFocus>
-                        Confirm
+                        Delete
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -4,15 +4,19 @@ import { Outlet, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Nav, Navbar, Offcanvas, Modal, Dropdown, DropdownButton } from "react-bootstrap";
 import { useAuth } from './context/UserAuthContext';
+import { useNotification } from './context/NotificationContext';
 
 function App() {
     let navigate = useNavigate();
     const { currentUser, login, users, logout } = useAuth();
     const [showLoginModal, setShowLoginModal] = useState(false);
 
+    const showNotification = useNotification();
+
     const handleLogin = (user) => {
         login(user);
         setShowLoginModal(false);
+        showNotification('success', `Logged in as ${user.name}`);
     };
 
     return (

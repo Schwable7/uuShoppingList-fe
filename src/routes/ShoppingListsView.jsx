@@ -2,19 +2,22 @@ import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
 import ShoppingListTile from '../bricks/ShoppingListTile';
 import {useAuth} from "../context/UserAuthContext";
+import {useShoppingListsCtx} from "../context/ShoppingListContext";
 import {Button} from "@mui/material";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import AddIcon from "@mui/icons-material/Add";
 import CreateShoppingListModal from "../bricks/CreateShoppingListModal";
+import { useNotification} from "../context/NotificationContext";
 
-function ShoppingListsView({shoppingLists}) {
-    const [shopLists, setShopLists] = useState(shoppingLists);
+function ShoppingListsView() {
     const [showArchived, setShowArchived] = useState(true);
     const [isCreateModalOpen, setModalOpen] = useState(false);
     const {currentUser} = useAuth();
+    const {shoppingLists, setShoppingLists} = useShoppingListsCtx();
+    const showNotification = useNotification();
 
     const handleArchive = (id) => {
-        const updatedShoppingLists = shopLists.map(list => {
+        const updatedShoppingLists = shoppingLists.map(list => {
             if (list.id === id) {
                 return {
                     ...list,
@@ -23,21 +26,22 @@ function ShoppingListsView({shoppingLists}) {
             }
             return list;
         });
-        setShopLists(updatedShoppingLists);
+        setShoppingLists(updatedShoppingLists);
     };
 
     const toggleArchivedVisibility = () => {
         setShowArchived(!showArchived);
     };
 
-    const visibleShoppingLists = currentUser ? shopLists.filter(shoppingList =>
+    const visibleShoppingLists = currentUser ? shoppingLists.filter(shoppingList =>
         shoppingList.members.some(member => member.id === currentUser.id) && (showArchived || !shoppingList.archived)
     ) : [];
 
 
     const handleDelete = (id) => {
-        const updatedShoppingLists = shopLists.filter(shoppingList => shoppingList.id !== id);
-        setShopLists(updatedShoppingLists);
+        const updatedShoppingLists = shoppingLists.filter(shoppingList => shoppingList.id !== id);
+        setShoppingLists(updatedShoppingLists);
+        showNotification('success', 'Shopping list deleted successfully');
     };
 
     const handleOpenCreateModal = () => {
@@ -74,7 +78,7 @@ function ShoppingListsView({shoppingLists}) {
                 )}
             </Grid>
 
-            <CreateShoppingListModal currentUser={currentUser} setShopLists={setShopLists} shopLists={shopLists}
+            <CreateShoppingListModal currentUser={currentUser} setShopLists={setShoppingLists} shopLists={shoppingLists}
                                      setModalOpen={setModalOpen} modalOpen={isCreateModalOpen}/>
         </>
     );

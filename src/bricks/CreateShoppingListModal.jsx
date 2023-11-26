@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -6,36 +6,47 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
+import FormHelperText from '@mui/material/FormHelperText';
 import DialogActions from '@mui/material/DialogActions';
+import { useNotification} from "../context/NotificationContext";
 
-function CreateShoppingListModal({modalOpen, setModalOpen, setShopLists, shopLists, currentUser}) {
+function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLists, currentUser }) {
     const [newListTitle, setNewListTitle] = useState('');
+    const [titleError, setTitleError] = useState(false);
+
+    const showNotification = useNotification();
+    // Function to validate title
+    const validateTitle = (title) => {
+        return title.length >= 2;
+    };
 
     // Function to handle modal close
     const handleCloseCreateModal = () => {
         setModalOpen(false);
+        setTitleError(false); // Reset error state when closing modal
     };
 
     // Function to handle the creation of a new shopping list
     const handleCreateNewList = () => {
-        console.log('Creating new list...');
-        const newList = {
-            id: Math.max(...shopLists.map(item => item.id), 0) + 1,
-            title: newListTitle,
-            owner: currentUser,
-            archived: false,
-            members: [currentUser],
-            items: []
-        };
-        setShopLists(previousLists => {
-            const updatedLists = [...previousLists, newList];
-            console.log('Updated shopping lists: ', updatedLists); // Log to see if the list is being added
-            return updatedLists;
-        });
-        setNewListTitle(''); // Reset the new list title
-        setModalOpen(false); // Close the modal
+        if (validateTitle(newListTitle)) {
+            console.log('Creating new list...');
+            const newList = {
+                id: Math.max(...shopLists.map(item => item.id), 0) + 1,
+                title: newListTitle,
+                owner: currentUser,
+                archived: false,
+                members: [currentUser],
+                items: []
+            };
+            setShopLists(previousLists => [...previousLists, newList]);
+            setNewListTitle(''); // Reset the new list title
+            setTitleError(false); // Reset error state
+            setModalOpen(false); // Close the modal
+            showNotification('success', 'Shopping list created successfully');
+        } else {
+            setTitleError(true); // Set error state if validation fails
+        }
     };
-
     const modalStyle = {
         position: 'absolute',
         top: '50%',
@@ -50,7 +61,6 @@ function CreateShoppingListModal({modalOpen, setModalOpen, setShopLists, shopLis
 
     return (
         <div>
-            {/* Modal for creating a new shopping list */}
             <Modal
                 open={modalOpen}
                 onClose={handleCloseCreateModal}
@@ -61,13 +71,14 @@ function CreateShoppingListModal({modalOpen, setModalOpen, setShopLists, shopLis
                     <Typography id="create-shopping-list-modal" variant="h6" component="h2">
                         Create New Shopping List
                     </Typography>
-                    <FormControl fullWidth sx={{mt: 2}}>
+                    <FormControl fullWidth sx={{ mt: 2 }} error={titleError}>
                         <InputLabel htmlFor="shopping-list-title">Title</InputLabel>
                         <Input
                             id="shopping-list-title"
                             value={newListTitle}
                             onChange={(e) => setNewListTitle(e.target.value)}
                         />
+                        {titleError && <FormHelperText>Title must be at least 2 characters long</FormHelperText>}
                     </FormControl>
                     <DialogActions>
                         <Button onClick={handleCloseCreateModal}>Cancel</Button>

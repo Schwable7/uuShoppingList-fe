@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { initialShoppingLists } from '../data';
+import React, {createContext, useContext, useState} from 'react';
+import {initialShoppingLists} from '../data';
+
 const ShoppingListsContext = createContext(null);
 
 export function useShoppingListsCtx() {

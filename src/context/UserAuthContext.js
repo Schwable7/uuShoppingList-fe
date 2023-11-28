@@ -9,7 +9,7 @@ export function useAuth() {
 }
 
 export function UserAuthProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState({id: 1, name: 'Mike'});
+    const [currentUser, setCurrentUser] = useState(null);
 
     // Function to handle user login
     const login = (user) => {

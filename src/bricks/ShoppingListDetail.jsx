@@ -5,6 +5,7 @@ import {useAuth} from "../context/UserAuthContext";
 import {useShoppingListsCtx} from "../context/ShoppingListContext";
 import styles from "../css/shoppinglist.module.css";
 import {useNotification} from "../context/NotificationContext";
+import {BASE_URL} from "../constants";
 
 function ShoppingListDetail({shoppingList}) {
 
@@ -25,6 +26,25 @@ function ShoppingListDetail({shoppingList}) {
         return currentUser && (currentUser.id === owner.id || members.some(member => member.id === currentUser.id));
     };
 
+    const updateShoppingList = (updatedList) => {
+        fetch(`${BASE_URL}/shoppingLists/${shoppingList.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedList)
+        })
+            .then(response => response.json())
+            .then(data => {
+                setShoppingLists(shoppingLists.map(list =>
+                    list.id === shoppingList.id ? data : list
+                ));
+                showNotification('success', 'Shopping list updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating shopping list:', error);
+                showNotification('error', 'Error updating shopping list');
+            });
+    };
+
     const handleTitleClick = () => {
         if (currentUser.id === owner.id) { // Check if the current user is the owner
             setIsEditingTitle(true);
@@ -43,48 +63,41 @@ function ShoppingListDetail({shoppingList}) {
         // Save the title on Enter key and cancel editing on Escape key
         if (event.key === 'Enter') {
             event.preventDefault();
-            setIsEditingTitle(false);
             const updatedTitle = event.target.value;
+            if (updatedTitle.trim() === '') {
+                showNotification('error', 'Shopping list title cannot be empty');
+                return;
+            }
+            setIsEditingTitle(false);
             setTitle(updatedTitle);
-            updateShoppingListTitle(shoppingList.id, updatedTitle);
+            updateShoppingListTitle(updatedTitle);
         } else if (event.key === 'Escape') {
             event.preventDefault();
             setIsEditingTitle(false);
         }
     };
 
-    const updateShoppingListTitle = (id, newTitle) => {
-        const updatedLists = shoppingLists.map(list => {
-            if (list.id === id) {
-                return { ...list, title: newTitle };
-            }
-            return list;
-        });
-        setShoppingLists(updatedLists);
-        showNotification('success', 'Shopping list title updated successfully');
+    const updateShoppingListTitle = (newTitle) => {
+        const updatedList = { ...shoppingList, title: newTitle };
+        updateShoppingList(updatedList);
     };
 
-    const updateShoppingListMembers = (id, updatedMembers) => {
-        const updatedLists = shoppingLists.map(list => {
-            if (list.id === id) {
-                return { ...list, members: updatedMembers };
-            }
-            return list;
-        });
-        setShoppingLists(updatedLists);
+    const updateShoppingListMembers = (updatedMembers) => {
+        const updatedList = { ...shoppingList, members: updatedMembers };
+        updateShoppingList(updatedList);
     };
 
     const addMember = (newMember) => {
         const updatedMembers = [...members, newMember];
         setMembers(updatedMembers);
-        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        updateShoppingListMembers(updatedMembers);
         showNotification('success', 'Member added successfully');
     };
 
     const removeMember = (memberToDelete) => {
         const updatedMembers = members.filter(member => member !== memberToDelete);
         setMembers(updatedMembers);
-        updateShoppingListMembers(shoppingList.id, updatedMembers);
+        updateShoppingListMembers(updatedMembers);
         showNotification('success', 'Member removed successfully');
     };
 
@@ -97,7 +110,7 @@ function ShoppingListDetail({shoppingList}) {
             };
             const newItems = [...items, newItemObject];
             setItems(newItems);
-            updateShoppingListItems(shoppingList.id, newItems);
+            updateShoppingListItems(newItems);
             setNewItem('');
             showNotification('success', 'Item added successfully');
         }
@@ -108,24 +121,19 @@ function ShoppingListDetail({shoppingList}) {
             item.id === id ? {...item, completed: !item.completed} : item
         );
         setItems(updatedItems);
-        updateShoppingListItems(shoppingList.id, updatedItems);
+        updateShoppingListItems(updatedItems);
     };
 
     const handleDeleteItem = (id) => {
         const updatedItems = items.filter(item => item.id !== id);
         setItems(updatedItems);
-        updateShoppingListItems(shoppingList.id, updatedItems);
+        updateShoppingListItems(updatedItems);
         showNotification('success', 'Item deleted successfully');
     };
 
-    const updateShoppingListItems = (id, updatedItems) => {
-        const updatedLists = shoppingLists.map(list => {
-            if (list.id === id) {
-                return { ...list, items: updatedItems };
-            }
-            return list;
-        });
-        setShoppingLists(updatedLists);
+    const updateShoppingListItems = (updatedItems) => {
+        const updatedList = { ...shoppingList, items: updatedItems };
+        updateShoppingList(updatedList);
     };
 
     const toggleShowCompleted = () => {

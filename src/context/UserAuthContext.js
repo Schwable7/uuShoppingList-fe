@@ -1,8 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { users } from '../data';
+import {BASE_URL} from "../constants";
+
 const UserAuthContext = createContext(null);
-
-
 
 export function useAuth() {
     return useContext(UserAuthContext);
@@ -10,6 +9,7 @@ export function useAuth() {
 
 export function UserAuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
+    const [users, setUsers] = useState([]); // State to hold fetched users
 
     // Function to handle user login
     const login = (user) => {
@@ -18,24 +18,23 @@ export function UserAuthProvider({ children }) {
 
     // Function to handle user logout
     const logout = () => {
-        // Perform logout logic here
         setCurrentUser(null);
     };
 
-    // Add other authentication methods as needed (signup, password reset, etc.)
-
-    // Optionally, handle the authentication state persistence
+    // Fetch users from the server
     useEffect(() => {
-        // Check for token in local storage or check session
-        // Set user if authenticated
+        fetch(`${BASE_URL}/users`)
+            .then(response => response.json())
+            .then(data => setUsers(data))
+            .catch(error => console.error('Error fetching users:', error));
+
     }, []);
 
     const value = {
         currentUser,
         login,
         logout,
-        users
-        // Add other values that components might need
+        users // Provide fetched users to the context
     };
 
     return (

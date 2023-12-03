@@ -9,6 +9,7 @@ import Input from '@mui/material/Input';
 import FormHelperText from '@mui/material/FormHelperText';
 import DialogActions from '@mui/material/DialogActions';
 import { useNotification} from "../context/NotificationContext";
+import {BASE_URL} from "../constants";
 
 function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLists, currentUser }) {
     const [newListTitle, setNewListTitle] = useState('');
@@ -29,7 +30,6 @@ function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLi
     // Function to handle the creation of a new shopping list
     const handleCreateNewList = () => {
         if (validateTitle(newListTitle)) {
-            console.log('Creating new list...');
             const newList = {
                 id: Math.max(...shopLists.map(item => item.id), 0) + 1,
                 title: newListTitle,
@@ -37,14 +37,27 @@ function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLi
                 archived: false,
                 members: [currentUser],
                 items: []
-            };
-            setShopLists(previousLists => [...previousLists, newList]);
-            setNewListTitle(''); // Reset the new list title
-            setTitleError(false); // Reset error state
-            setModalOpen(false); // Close the modal
-            showNotification('success', 'Shopping list created successfully');
+            }
+
+            fetch(`${BASE_URL}/shoppingLists`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newList)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setShopLists(previousLists => [...previousLists, data]);
+                    setNewListTitle('');
+                    setTitleError(false);
+                    setModalOpen(false);
+                    showNotification('success', 'Shopping list created successfully');
+                })
+                .catch(error => {
+                    console.error('Error creating shopping list:', error);
+                    showNotification('error', 'Error creating shopping list');
+                });
         } else {
-            setTitleError(true); // Set error state if validation fails
+            setTitleError(true);
         }
     };
     const modalStyle = {

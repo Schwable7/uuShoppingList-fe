@@ -1,19 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShoppingListDetail from "../bricks/ShoppingListDetail";
-import {useParams} from "react-router-dom";
-import {useShoppingListsCtx} from "../context/ShoppingListContext";
+import { useParams } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
+import {BASE_URL} from "../constants";
 
 function ShoppingList() {
+    let { id } = useParams();
+    const [selectedShoppingList, setSelectedShoppingList] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    let {id} = useParams();
-    const {shoppingLists} = useShoppingListsCtx();
-    const shoppingListId = parseInt(id, 10); // Convert the id to a number
-    const selectedShoppingList = shoppingLists.find(list => list.id === shoppingListId);
+    useEffect(() => {
+        const shoppingListId = parseInt(id, 10); // Convert the id to a number
+        setIsLoading(true);
 
+        fetch(`${BASE_URL}/shoppingLists/${shoppingListId}`)
+            .then(response => response.json())
+            .then(data => {
+                setSelectedShoppingList(data);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching shopping list:', error);
+                setIsLoading(false);
+            });
+    }, [id]);
+
+    if (isLoading) {
+        return <CircularProgress />;
+    }
 
     return (
-        <>{selectedShoppingList ? (<ShoppingListDetail shoppingList={selectedShoppingList}/>
-        ) : (<h3>Shopping list not found</h3>)}
+        <>
+            {selectedShoppingList ? (
+                <ShoppingListDetail shoppingList={selectedShoppingList} />
+            ) : (
+                <h3>Shopping list not found</h3>
+            )}
         </>
     );
 }

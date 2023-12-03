@@ -1,0 +1,320 @@
+{
+  "shoppingLists": [
+    {
+      "id": 1,
+      "title": "Groceries 🛒",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 1,
+          "name": "Mike"
+        },
+        {
+          "id": 2,
+          "name": "Larry"
+        },
+        {
+          "id": 3,
+          "name": "John"
+        },
+        {
+          "id": 4,
+          "name": "Kate"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "Milk 🥛",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "Bread 🍞",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "Eggs 🥚",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "Apples 🍎",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Bannana 🍌",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Trip shopping 🏕️",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 2,
+          "name": "Larry"
+        },
+        {
+          "id": 1,
+          "name": "Mike"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "Hiking boots 🥾",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "Tent 🏕️",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "Gloves 🧤",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "Hat 🧢",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Beer 🍺",
+          "completed": false
+        },
+        {
+          "id": 6,
+          "text": "Water 💧",
+          "completed": false
+        },
+        {
+          "id": 7,
+          "text": "Food 🍕",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Drug store 💊",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 1,
+          "name": "Mike"
+        },
+        {
+          "id": 3,
+          "name": "John"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "Tooth paste 🦷",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "Shampoo 🧴",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "Soap 🧼",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "Toilet paper 🧻",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Conditioner 💆",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Snacks 🍿",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 1,
+          "name": "Mike"
+        },
+        {
+          "id": 4,
+          "name": "Kate"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "Chocolate 🍫",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "Cola 🥤",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "Marshmallows 🍡",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "Chips 🍟",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Pretzels 🥨",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Healthy food 🥗",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 1,
+          "name": "Mike"
+        },
+        {
+          "id": 2,
+          "name": "Larry"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "Avocado 🥑",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "Oats 🥣",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "Rice 🍚",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "Salmon 🐟",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Chicken 🍗",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Electronics 📱",
+      "owner": {
+        "id": 1,
+        "name": "Mike"
+      },
+      "archived": false,
+      "members": [
+        {
+          "id": 1,
+          "name": "Mike"
+        },
+        {
+          "id": 4,
+          "name": "Kate"
+        }
+      ],
+      "items": [
+        {
+          "id": 1,
+          "text": "iPhone 📱",
+          "completed": false
+        },
+        {
+          "id": 2,
+          "text": "MacBook Pro 💻",
+          "completed": false
+        },
+        {
+          "id": 3,
+          "text": "AirPods 🎧",
+          "completed": false
+        },
+        {
+          "id": 4,
+          "text": "iPad 📟",
+          "completed": false
+        },
+        {
+          "id": 5,
+          "text": "Apple Watch ⌚",
+          "completed": false
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Mike"
+    },
+    {
+      "id": 2,
+      "name": "Larry"
+    },
+    {
+      "id": 3,
+      "name": "John"
+    },
+    {
+      "id": 4,
+      "name": "Kate"
+    },
+    {
+      "id": 5,
+      "name": "Mary"
+    }
+  ]
+}

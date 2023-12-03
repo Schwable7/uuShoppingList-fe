@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ShoppingListDetail from "../bricks/ShoppingListDetail";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
-import {BASE_URL} from "../constants";
 
 function ShoppingList() {
     let { id } = useParams();
@@ -13,7 +12,7 @@ function ShoppingList() {
         const shoppingListId = parseInt(id, 10); // Convert the id to a number
         setIsLoading(true);
 
-        fetch(`${BASE_URL}/shoppingLists/${shoppingListId}`)
+        fetch(`http://localhost:8000/shoppingLists/${shoppingListId}`)
             .then(response => response.json())
             .then(data => {
                 setSelectedShoppingList(data);

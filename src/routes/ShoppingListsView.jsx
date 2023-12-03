@@ -7,7 +7,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import AddIcon from "@mui/icons-material/Add";
 import CreateShoppingListModal from "../bricks/CreateShoppingListModal";
 import { useNotification} from "../context/NotificationContext";
-import {BASE_URL} from "../constants";
 
 function ShoppingListsView() {
     const [showArchived, setShowArchived] = useState(true);
@@ -22,7 +21,7 @@ function ShoppingListsView() {
     useEffect(() => {
         if (currentUser) {
             setIsLoading(true); // Start loading
-            fetch(`${BASE_URL}/shoppingLists`)
+            fetch(`http://localhost:8000/shoppingLists`)
                 .then(response => response.json())
                 .then(data => {
                     setShoppingLists(data);
@@ -58,7 +57,7 @@ function ShoppingListsView() {
         };
 
         // Send the updated shopping list to the server
-        fetch(`${BASE_URL}/shoppingLists/${id}`, {
+        fetch(`http://localhost:8000/shoppingLists/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedShoppingList)
@@ -83,7 +82,7 @@ function ShoppingListsView() {
 
 
     const handleDelete = (id) => {
-        fetch(`${BASE_URL}/shoppingLists/${id}`, {
+        fetch(`http://localhost:8000/shoppingLists/${id}`, {
             method: 'DELETE'
         })
             .then(response => {

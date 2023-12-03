@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -8,8 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import FormHelperText from '@mui/material/FormHelperText';
 import DialogActions from '@mui/material/DialogActions';
-import { useNotification} from "../context/NotificationContext";
-import {BASE_URL} from "../constants";
+import {useNotification} from "../context/NotificationContext";
 
 function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLists, currentUser }) {
     const [newListTitle, setNewListTitle] = useState('');
@@ -39,7 +38,7 @@ function CreateShoppingListModal({ modalOpen, setModalOpen, setShopLists, shopLi
                 items: []
             }
 
-            fetch(`${BASE_URL}/shoppingLists`, {
+            fetch(`http://localhost:8000/shoppingLists`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newList)

@@ -1,5 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import {BASE_URL} from "../constants";
+import React, {createContext, useContext, useEffect, useState} from 'react';
 
 const UserAuthContext = createContext(null);
 
@@ -23,7 +22,7 @@ export function UserAuthProvider({ children }) {
 
     // Fetch users from the server
     useEffect(() => {
-        fetch(`${BASE_URL}/users`)
+        fetch(`http://localhost:8000/users`)
             .then(response => response.json())
             .then(data => setUsers(data))
             .catch(error => console.error('Error fetching users:', error));

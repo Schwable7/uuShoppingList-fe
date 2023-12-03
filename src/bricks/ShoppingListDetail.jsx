@@ -5,7 +5,6 @@ import {useAuth} from "../context/UserAuthContext";
 import {useShoppingListsCtx} from "../context/ShoppingListContext";
 import styles from "../css/shoppinglist.module.css";
 import {useNotification} from "../context/NotificationContext";
-import {BASE_URL} from "../constants";
 
 function ShoppingListDetail({shoppingList}) {
 
@@ -27,7 +26,7 @@ function ShoppingListDetail({shoppingList}) {
     };
 
     const updateShoppingList = (updatedList) => {
-        fetch(`${BASE_URL}/shoppingLists/${shoppingList.id}`, {
+        fetch(`http://localhost:8000/shoppingLists/${shoppingList.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedList)

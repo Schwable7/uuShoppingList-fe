@@ -12,6 +12,7 @@
 ### To run this application follow these steps
 1. Clone repository
 2. Run `npm install`
-3. Run `npm start`
-4. go to http://localhost:3000/
-5. Enjoy the app!
+3. Run `json-server --watch data.json --port 8000` - it will run the mock server with prepared data.json
+4. Run `npm start`
+5. go to http://localhost:3000/
+6. Enjoy the app!
